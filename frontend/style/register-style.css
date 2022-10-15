@@ -1,0 +1,150 @@
+body { min-height: 100vh; font-weight: 300; padding: 25px; display: flex; flex-direction: column; justify-content: center; align-items: center; }
+
+header { 
+    position: absolute;
+    box-shadow: 5px 5px 5px #00000017;
+    top: 10px;
+    width: 100vw;
+    height: 75px;
+}
+
+header h1 {
+    font-size: 3rem;
+    text-align: center;
+}
+
+.main-section {
+    max-width: 100%;
+    border: 1.5px solid var(--color4);
+    border-radius: 10px;
+    padding: 25px;
+    text-align: center;
+    position: relative;
+}
+
+.main-section h2 {
+    font-weight: 400;
+    color: var(--color4);
+    margin: 10px;
+}
+
+.main-section p {
+    font-weight: inherit;
+    color: var(--color2);
+    font-size: 1.1rem;
+    max-width: 100%;
+    width: 750px;
+}
+
+.label-for-inputs-register-details {
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    max-width: 100%;
+    border: 1px solid var(--color0);
+    border-radius: 5px;
+    margin: 10px;
+    padding: 10px;
+}
+
+.label-for-inputs-register-details p {
+    color: var(--color0);
+    font-size: 1rem;
+    text-align: left;
+}
+
+.label-for-inputs-register-details input {
+    padding: 15px;
+    font-size: 1rem;
+    border: none;
+    width: 100%;
+}
+
+.label-for-inputs-register-details input:focus {
+    outline: none;
+}
+
+.register-details .accept-terms-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: baseline;
+}
+
+.accept-terms-wrapper input[type="checkbox"] {
+    width: 17px;
+    height: 17px;
+    margin: 10px;
+    cursor: pointer;
+}
+
+.register-details [data-button] {
+    padding: 10px 0 15px 0;
+    cursor: pointer;
+    margin: 10px;
+    font-size: 1rem;
+}
+
+.register-details [data-button="cancel-channel-creation"] {
+    background-color: transparent;
+    border: none;
+    color: var(--color0);
+    font-weight: 500;
+    font-size: 1rem;
+}
+ 
+.register-details [data-button="create-new-channel"] {
+    padding: 10px;
+    background-color: var(--color0);
+    color: white;
+    border: none;
+    box-shadow: 5px 5px 25px #0000002c
+}
+
+.register-details [data-button="create-new-channel"]:disabled {
+    padding: 10px;
+    background-color: var(--color3);
+    color: var(--color2);
+    border: none;
+    box-shadow: 5px 5px 25px #0000002c
+}
+
+footer {
+    position: fixed;
+    bottom: 10px;
+}
+
+@media screen and (max-width: 600px) {
+    header h1 {
+        margin-top: 15px;
+        font-size: 1.5rem;
+    }
+
+    .main-section {
+        margin: 100px 0 100px 0;
+    }
+
+    .main-section h2 {
+        font-size: 1.5rem;
+        word-break: break-all;
+    }
+
+    .main-section p {
+        word-break: break-all;
+    }
+
+    .accept-terms-wrapper {
+        word-break: break-all;
+    }
+
+    .register-buttons {
+        display: flex;
+        flex-direction: column;
+    }
+
+    footer {
+        position: relative;
+    }
+}
