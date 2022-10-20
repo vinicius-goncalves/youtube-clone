@@ -1,5 +1,6 @@
 export { 
     BASE_LINK,
+    SERVER_BASE_LINK,
     isFalsy,
     digestText,
     colorByPercetange,
@@ -7,7 +8,8 @@ export {
  }
 
 const PORT = 8080
-const BASE_LINK = `https://localhost:${PORT}`
+const BASE_LINK = `http://127.0.0.1:${PORT}`
+const SERVER_BASE_LINK = `http://localhost:${PORT}`
 
 function isFalsy(data) {
     const falsyValues = [0, false, '', -1, null, undefined]
@@ -35,13 +37,12 @@ function digestText(data) {
     })
 
     const hashArray = crypto.subtle.digest('SHA-256', arrayBuffer).then(hashBuffer => {
-        const hashArray = [...new Uint8Array(hashBuffer)]
-        const hashHex = hashArray.map(asciiChar => asciiChar.toString(16)).join('')
+        const hashArray = Array.from(new Uint8Array(hashBuffer))
+        const hashHex = hashArray.map(ascii => ascii.toString(16)).join('')
         return hashHex
     })
 
     return hashArray
-
 }
 
 function randomUUID() {
@@ -53,4 +54,3 @@ function randomUUID() {
     })
     return uuid
 }
-

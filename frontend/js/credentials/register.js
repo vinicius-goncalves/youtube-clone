@@ -1,7 +1,8 @@
 import { 
     BASE_LINK,
+    SERVER_BASE_LINK,
     digestText
- } from '../../utils.js'
+ } from '../utils.js'
 
 const createNewChannelBtn = document.querySelector('[data-button="create-new-channel"]')
 const acceptTermsCheckbox = document.querySelector('[id="accept-terms"]')
@@ -34,6 +35,13 @@ acceptTermsCheckbox.addEventListener('click', (event) => {
     removeDisabledAttribute(event)
 })
 
+function sendCreationChannelRequest(channelDetails) {
+    fetch(`${SERVER_BASE_LINK}/channel?type=account&handleWith=creation`, {
+        method: 'POST',
+        body: JSON.stringify(channelDetails)
+    }).then(response => response.json()).then(data => console.log(data))
+}
+
 function handleChannelCreation() {
     
     const channelRegisterDetails = Array.from(document.querySelectorAll('[data-register-detail]'))
@@ -41,12 +49,13 @@ function handleChannelCreation() {
     const digestChannelRegisters = channelRegisterDetails.map(async (credentials) => {
 
         const { registerDetail } = credentials.dataset
+        
         if(registerDetail.toLowerCase() !== 'channel-name') {
             const digestCredential = await digestText(credentials.value)
             return `${registerDetail}:${digestCredential}`
         }
         
-        return `${registerDetail}:${credentials.value}`
+        return `${registerDetail.replace('channel-name', 'channelName')}:${credentials.value}`
     })
 
     Promise.all(digestChannelRegisters).then(credentials => {
@@ -57,13 +66,9 @@ function handleChannelCreation() {
             return acc
         }, {})
 
-        console.log(crendObj)
+        sendCreationChannelRequest(crendObj)
 
     })
 }
 
-createNewChannelBtn.addEventListener('click', () => {
-    
-    handleChannelCreation()
-    
-})
+createNewChannelBtn.addEventListener('click', handleChannelCreation)

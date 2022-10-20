@@ -54,7 +54,37 @@ function checkIfHasRepeat(string, charToCheck = '-', giveAutomaticResult = true)
     return objItselfProperties
 }
 
+function handleBufferData(request) {
+    
+    const promise = new Promise(resolve => {
+
+        const buffer = []
+        
+        request.on('data', (chunk) => {
+            buffer.push(chunk)
+        })
+
+        request.on('end', () => {
+            resolve(Buffer.concat(buffer).toString())
+        })
+    })
+
+    return promise
+}
+
+function randomUUID() {
+    let dateTime = Date.now()
+    const uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (char) => {
+        dateTime = dateTime / 16
+        const random = (dateTime + Math.random() * 16) % 16 | 0
+        return (char === 'x' ? random : random & 0x3 | 0x8).toString(16)
+    })
+    return uuid
+}
+
 module.exports = {
     randomCharacters,
-    checkIfHasRepeat
+    checkIfHasRepeat,
+    handleBufferData,
+    randomUUID
 }
