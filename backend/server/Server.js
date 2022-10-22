@@ -2,6 +2,7 @@ const http = require('http')
 const nodeURL = require('url')
 
 const AccountController = require('../controllers/AccountController')
+const AuthController = require('../controllers/AuthController')
 
 const port = process.env.PORT || 8080
 
@@ -10,10 +11,15 @@ const server = http.createServer((request, response) => {
     const { method, url } = request
     console.log(method)
 
+    const params = nodeURL.parse(url, true).query
+    const type = params.type
+    const handleWith = params.handleWith
+    
+
     switch(method) {
 
         case 'OPTIONS':
-            response.writeHead(200, { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*', 'Access-Control-Allow-Methods': '*' })
+            response.writeHead(200, { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*', 'Access-Control-Allow-Methods': '*', 'Access-Control-Allow-Headers': '*' })
             response.end()
             break
 
@@ -21,14 +27,16 @@ const server = http.createServer((request, response) => {
 
             if(url.indexOf('/channel') !== -1) {
 
-                const params = nodeURL.parse(url, true).query
-                const type = params.type
-                const handleWith = params.handleWith
 
                 if(type === 'account' && handleWith === 'creation') {
                     AccountController.initChannelCreation(request, response)
                     break
                 }
+            }
+
+            if(url.indexOf('/account') !== -1 && handleWith === 'token-verification') {
+                AuthController.verifyToken(request, response)
+                break
             }
 
             response.writeHead(200, {

@@ -4,9 +4,10 @@ import {
     digestText
  } from '../utils.js'
 
+ import { TOKEN } from '../data/token-storage.js'
+
 const createNewChannelBtn = document.querySelector('[data-button="create-new-channel"]')
 const acceptTermsCheckbox = document.querySelector('[id="accept-terms"]')
-
 
 window.addEventListener('load', () => {
     const users = [`user${Math.floor(Math.random() * (9999 - 999) + 999)}`, `user${Math.floor(Math.random() * (9999 - 999) + 999)}`]
@@ -39,7 +40,24 @@ function sendCreationChannelRequest(channelDetails) {
     fetch(`${SERVER_BASE_LINK}/channel?type=account&handleWith=creation`, {
         method: 'POST',
         body: JSON.stringify(channelDetails)
-    }).then(response => response.json()).then(data => console.log(data))
+    }).then(response => {
+        if(!response.ok) {
+            throw new Error('An error has occuried over the request response')
+        }
+
+        return response.json()
+    }).then(registerDetails => {
+
+        const { token, refreshToken } = registerDetails.tokens
+
+        TOKEN.setTokens(token, refreshToken)
+
+        const openURL = new URL(window.location.origin)
+        openURL.pathname = '/frontend/pages/token-test.html'
+
+        window.open(openURL, '_blank')
+
+    })
 }
 
 function handleChannelCreation() {

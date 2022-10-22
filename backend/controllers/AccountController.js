@@ -39,7 +39,7 @@ async function initChannelCreation(request, response) {
                 })
 
                 const tokenCreated = jwt.sign({ tokenExpiresAt: Date.now() + (30 * 1000)}, process.env.TOKEN_PRIVATE_KEY, { expiresIn: 30 })
-                const refreshTokenCreated = jwt.sign({ refreshTokenExpiresAt: Date.now() * (3600 * 1000) }, 
+                const refreshTokenCreated = jwt.sign({ refreshTokenExpiresAt: Date.now() * (60 * 1000) }, 
                 process.env.REFRESH_TOKEN_PRIVATE_KEY, { expiresIn: 3600 })
 
                 response.write(JSON.stringify({
@@ -49,7 +49,7 @@ async function initChannelCreation(request, response) {
                     createdAt: Date.now(),
                     tokens: {
                         token: tokenCreated,
-                        refreshToken: refreshToken
+                        refreshToken: refreshTokenCreated
                     }
                 }))
 
