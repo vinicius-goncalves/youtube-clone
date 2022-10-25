@@ -7,7 +7,9 @@ function createTokenObj(tokenType, valid = false) {
     const newObj = Object.create(null)
 
     const objOptions = {
-        value: valid,
+        value: {
+            valid
+        },
         writitable: true,
         configurable: true,
         enumerable: true
@@ -27,39 +29,37 @@ async function verifyToken(request, response) {
         const tokens = JSON.parse(bufferData)
 
         const objValues = Object.entries(tokens)
-        const tokensVerified = objValues.reduce((acc, item) => {
+        const tokensVerified = objValues.reduce((acc, item, index) => {
             const [ tokenType, value ] = item
             
             const secretKeyType = tokenType === 'token' 
                 ? process.env.TOKEN_PRIVATE_KEY
                 : process.env.REFRESH_TOKEN_PRIVATE_KEY
 
-            jwt.verify(value, secretKeyType, (error) => {
-                if(error) {
-                    acc[tokenType] = {
-                        valid: false
-                    }
-                    return acc
-                }
+            try {
 
-                acc[tokenType] = {
-                    valid: true
-                }
+                jwt.verify(value, secretKeyType)
+                const newObj = createTokenObj(tokenType, true)
                 return acc
-            })
 
-            return acc
-        
+            } catch (error) {
+
+                const obj = createTokenObj(tokenType, false)
+                for(let key in obj) {
+                    Object.defineProperty(acc, key, {
+                        value: obj[key],
+                        enumerable: true
+                    })
+                }
+                return acc        
+            }
         }, {})
-
-        console.log(tokensVerified)
-
 
         response.writeHead(200, { 
             'Content-Type': 'application/json',
             'Access-Control-Allow-Origin': '*'
         })
-        response.end()
+        response.end(JSON.stringify(tokensVerified))
 
     } catch(error) {
         console.log(error)

@@ -11,6 +11,22 @@ import { TOKEN } from './data/token-storage.js'
     const xhr = new XMLHttpRequest()
 
     xhr.open('POST', `${SERVER_BASE_LINK}/account?handleWith=token-verification`)
+    xhr.addEventListener('load', (event) => {
+        const { response } = event.target
+        const tokenResponseObj = JSON.parse(response)
+
+        
+        const objValues = []
+        for(let i in tokenResponseObj) {
+            objValues.push(tokenResponseObj[i])
+        }
+        
+        const allTokensAreInvalid = objValues.every(token => token.valid === false)
+        if(allTokensAreInvalid) {
+            document.querySelector('[data-wrapper="token-is-not-working"]').style.display = 'flex'
+        }
+    })
+
     xhr.setRequestHeader('Content-Type', 'application/json')
     xhr.send(tokens)
 

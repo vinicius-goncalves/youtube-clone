@@ -9,7 +9,7 @@ const port = process.env.PORT || 8080
 const server = http.createServer((request, response) => {
     
     const { method, url } = request
-    console.log(method)
+    // console.log(method)
 
     const params = nodeURL.parse(url, true).query
     const type = params.type
