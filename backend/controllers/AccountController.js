@@ -38,9 +38,9 @@ async function initChannelCreation(request, response) {
                     'Access-Control-Allow-Origin': '*'
                 })
 
-                const tokenCreated = jwt.sign({ tokenExpiresAt: Date.now() + (30 * 1000)}, process.env.TOKEN_PRIVATE_KEY, { expiresIn: 30 })
+                const tokenCreated = jwt.sign({ tokenExpiresAt: Date.now() + (30 * 1000)}, process.env.TOKEN_SECRET_KEY, { expiresIn: 30 })
                 const refreshTokenCreated = jwt.sign({ refreshTokenExpiresAt: Date.now() * (60 * 1000) }, 
-                process.env.REFRESH_TOKEN_PRIVATE_KEY, { expiresIn: 3600 })
+                process.env.REFRESH_TOKEN_SECRET_KEY, { expiresIn: 3600 })
 
                 response.write(JSON.stringify({
                     created: true,

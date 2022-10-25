@@ -12,19 +12,34 @@ import { TOKEN } from './data/token-storage.js'
 
     xhr.open('POST', `${SERVER_BASE_LINK}/account?handleWith=token-verification`)
     xhr.addEventListener('load', (event) => {
+
         const { response } = event.target
         const tokenResponseObj = JSON.parse(response)
+        console.log(tokenResponseObj)
 
-        
+        if(tokenResponseObj.error) {
+            const backPage = new URL(window.location.origin)
+            backPage.pathname = '/frontend/pages/credentials/register.html'
+            window.location.href = backPage.href
+
+            throw new Error('Token storage has not been found.')
+            
+        }
+
         const objValues = []
         for(let i in tokenResponseObj) {
             objValues.push(tokenResponseObj[i])
         }
         
         const allTokensAreInvalid = objValues.every(token => token.valid === false)
+        
         if(allTokensAreInvalid) {
             document.querySelector('[data-wrapper="token-is-not-working"]').style.display = 'flex'
+            return
         }
+
+        const foundValidToken = objValues.find(token => token.valid === true)
+
     })
 
     xhr.setRequestHeader('Content-Type', 'application/json')
