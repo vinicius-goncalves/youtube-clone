@@ -69,7 +69,7 @@ async function verifyToken(request, response) {
 async function refreshToken(request, response) {
 
     try {
-
+        
     } catch (error) {
         
     }

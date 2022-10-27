@@ -39,6 +39,8 @@ const server = http.createServer((request, response) => {
                 break
             }
 
+            if(url.indexOf('/account') !== 1 && handleWith === 'update-authorization-token')
+
             response.writeHead(200, {
                 'Access-Control-Allow-Origin': '*',
                 'Access-Control-Allow-Methods': '*'
